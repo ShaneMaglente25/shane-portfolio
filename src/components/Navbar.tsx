@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 type NavbarProps = {
   isDark: boolean
@@ -14,32 +14,26 @@ const navLinks = [
 ]
 
 function Navbar({ isDark, onToggleTheme }: NavbarProps) {
-  // Navigation state
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isAtTop, setIsAtTop] = useState(true)
-  const [isHovering, setIsHovering] = useState(false)
   const [isScrollingUp, setIsScrollingUp] = useState(false)
+  const [isHovering, setIsHovering] = useState(false)
   const [activeSection, setActiveSection] = useState('')
 
-  // Remember the previous scroll position
   const lastScrollY = useRef(0)
 
-  // -----------------------------------
-  // 1. Detect scrolling direction
-  // -----------------------------------
+  // Track scroll direction
   useEffect(() => {
     const handleScroll = () => {
-      const currentScrollY = window.scrollY
+      const current = window.scrollY
 
-      setIsAtTop(currentScrollY < 20)
+      setIsAtTop(current < 20)
 
-      const scrollDifference =
-        currentScrollY - lastScrollY.current
+      const difference = current - lastScrollY.current
 
-      // Avoid flickering from tiny scroll movements
-      if (Math.abs(scrollDifference) > 4) {
-        setIsScrollingUp(scrollDifference < 0)
-        lastScrollY.current = currentScrollY
+      if (Math.abs(difference) > 4) {
+        setIsScrollingUp(difference < 0)
+        lastScrollY.current = current
       }
     }
 
@@ -55,11 +49,9 @@ function Navbar({ isDark, onToggleTheme }: NavbarProps) {
     }
   }, [])
 
-  // -----------------------------------
-  // 2. Track the active page section
-  // -----------------------------------
+  // Track the active section
   useEffect(() => {
-    const sectionIds = [
+    const ids = [
       'about',
       'skills',
       'projects',
@@ -68,38 +60,32 @@ function Navbar({ isDark, onToggleTheme }: NavbarProps) {
     ]
 
     const updateActiveSection = () => {
-      // No highlighted link at the top of the page
       if (window.scrollY < 80) {
         setActiveSection('')
         return
       }
 
       const activationPoint = window.innerHeight * 0.35
+      let current = ''
 
-      let currentSection = ''
-
-      for (const id of sectionIds) {
+      for (const id of ids) {
         const section = document.getElementById(id)
 
         if (!section) continue
 
-        const rect = section.getBoundingClientRect()
-
-        if (rect.top <= activationPoint) {
-          currentSection = id
+        if (
+          section.getBoundingClientRect().top <=
+          activationPoint
+        ) {
+          current = id
         }
       }
 
-      // Ensure Contact activates at the page bottom
-      const isNearBottom =
+      const nearBottom =
         window.innerHeight + window.scrollY >=
         document.documentElement.scrollHeight - 10
 
-      if (isNearBottom) {
-        currentSection = 'contact'
-      }
-
-      setActiveSection(currentSection)
+      setActiveSection(nearBottom ? 'contact' : current)
     }
 
     updateActiveSection()
@@ -107,34 +93,15 @@ function Navbar({ isDark, onToggleTheme }: NavbarProps) {
     window.addEventListener('scroll', updateActiveSection, {
       passive: true,
     })
-
     window.addEventListener('resize', updateActiveSection)
 
     return () => {
-      window.removeEventListener(
-        'scroll',
-        updateActiveSection
-      )
-
-      window.removeEventListener(
-        'resize',
-        updateActiveSection
-      )
+      window.removeEventListener('scroll', updateActiveSection)
+      window.removeEventListener('resize', updateActiveSection)
     }
   }, [])
 
-  // -----------------------------------
-  // 3. Mobile menu controls
-  // -----------------------------------
-  const toggleMenu = () => {
-    setIsMenuOpen((previous) => !previous)
-  }
-
-  const closeMenu = () => {
-    setIsMenuOpen(false)
-  }
-
-  // Close mobile menu using the Escape key
+  // Escape closes the mobile menu
   useEffect(() => {
     if (!isMenuOpen) return
 
@@ -151,66 +118,58 @@ function Navbar({ isDark, onToggleTheme }: NavbarProps) {
     }
   }, [isMenuOpen])
 
-  // -----------------------------------
-  // 4. Determine navbar visibility
-  // -----------------------------------
   const isVisible =
     isAtTop ||
     isScrollingUp ||
     isHovering ||
     isMenuOpen
 
-  // -----------------------------------
-  // 5. Dynamic navigation link styling
-  // -----------------------------------
-  const navLinkClass = (id: string) => `
-    rounded-md px-3 py-3 text-sm
-    transition-colors duration-200
+  function closeMenu() {
+    setIsMenuOpen(false)
+  }
+
+  const linkClass = (id: string) => `
+    group relative block rounded-md px-3 py-3
+    text-sm transition-colors duration-200
+    md:px-0 md:py-0
     focus-visible:outline-2
     focus-visible:outline-offset-4
     focus-visible:outline-indigo-500
-    md:px-0 md:py-0
-
     ${
       activeSection === id
-        ? 'font-medium text-indigo-600 dark:text-indigo-400'
-        : 'text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100'
+        ? 'font-semibold text-indigo-600 dark:text-indigo-300'
+        : 'font-medium text-slate-700 hover:text-indigo-600 dark:text-slate-200 dark:hover:text-indigo-300'
     }
+  `
+
+  const controlClass = `
+    flex h-9 w-9 items-center justify-center
+    rounded-lg border border-slate-300/50
+    bg-white/40 text-slate-900
+    transition-colors duration-200
+    hover:bg-white/70
+    dark:border-white/20
+    dark:bg-white/10
+    dark:text-white
+    dark:hover:bg-white/20
+    focus-visible:outline-2
+    focus-visible:outline-offset-2
+    focus-visible:outline-indigo-500
   `
 
   return (
     <div
-      className="fixed left-0 right-0 top-0 z-50"
+      className="fixed inset-x-0 top-0 z-50"
       onMouseEnter={() => setIsHovering(true)}
       onMouseLeave={() => setIsHovering(false)}
     >
-      {/* Hover detection area at the top */}
-      <div
-        className="absolute left-0 right-0 top-0 h-6 bg-transparent"
-        aria-hidden="true"
-      />
-
-      {/* Main navbar */}
       <header
         className={`
-          relative flex h-[73px] w-full
-          items-center justify-between
-
-          border-b border-neutral-200
-          bg-neutral-50 px-6
-
-          transition-transform duration-300
-          ease-in-out
-
+          relative flex h-[73px] items-center
+          justify-between px-6 md:px-10
+          transition-transform duration-300 ease-in-out
           focus-within:translate-y-0
-
           motion-reduce:transition-none
-
-          dark:border-neutral-800
-          dark:bg-neutral-950
-
-          md:px-10
-
           ${
             isVisible
               ? 'translate-y-0'
@@ -218,48 +177,48 @@ function Navbar({ isDark, onToggleTheme }: NavbarProps) {
           }
         `}
       >
-        {/* Website logo */}
+        {/* Glass background: separate from content */}
+        <div
+          aria-hidden="true"
+          className="
+            pointer-events-none absolute inset-0 z-0
+            border-b border-white/50
+            bg-white/[0.45]
+            backdrop-blur-lg
+            backdrop-saturate-125
+            dark:border-white/10
+            dark:bg-[#0c1428]/[0.45]
+          "
+        />
+
+        {/* Foreground logo */}
         <a
           href="#"
           onClick={closeMenu}
           className="
-            text-base font-bold tracking-tight
-            text-neutral-900
-            transition-colors hover:text-indigo-600
+            relative z-10 text-base font-bold
+            tracking-tight text-slate-950
+            hover:text-indigo-600
+            dark:text-white
+            dark:hover:text-indigo-300
             focus-visible:outline-2
             focus-visible:outline-offset-4
             focus-visible:outline-indigo-500
-            dark:text-neutral-100
-            dark:hover:text-indigo-400
           "
         >
-          Shane.
+          Shane
+          <span className="text-indigo-600 dark:text-indigo-400">
+            .
+          </span>
         </a>
 
-        {/* Navigation */}
+        {/* Desktop navigation */}
         <nav
-          id="primary-navigation"
           aria-label="Main navigation"
-          className={`
-            absolute left-0 right-0 top-[73px]
-            flex-col gap-1
-
-            border-b border-neutral-200
-            bg-neutral-50 p-5
-
-            dark:border-neutral-800
-            dark:bg-neutral-950
-
-            md:static md:flex md:flex-row
-            md:items-center md:gap-7
-            md:border-0 md:bg-transparent md:p-0
-
-            ${
-              isMenuOpen
-                ? 'flex'
-                : 'hidden'
-            }
-          `}
+          className="
+            relative z-10 hidden items-center
+            gap-7 bg-transparent md:flex
+          "
         >
           {navLinks.map((link) => (
             <a
@@ -271,17 +230,31 @@ function Navbar({ isDark, onToggleTheme }: NavbarProps) {
                   ? 'location'
                   : undefined
               }
-              className={navLinkClass(link.id)}
+              className={linkClass(link.id)}
             >
               {link.label}
+
+              <span
+                aria-hidden="true"
+                className={`
+                  absolute -bottom-2 left-0
+                  h-0.5 rounded-full
+                  bg-indigo-500
+                  transition-all duration-300
+                  dark:bg-indigo-400
+                  ${
+                    activeSection === link.id
+                      ? 'w-full'
+                      : 'w-0 group-hover:w-full'
+                  }
+                `}
+              />
             </a>
           ))}
         </nav>
 
-        {/* Right-side controls */}
-        <div className="flex items-center gap-2">
-
-          {/* Theme toggle */}
+        {/* Foreground buttons */}
+        <div className="relative z-10 flex items-center gap-2">
           <button
             type="button"
             onClick={onToggleTheme}
@@ -290,69 +263,74 @@ function Navbar({ isDark, onToggleTheme }: NavbarProps) {
                 ? 'Switch to light mode'
                 : 'Switch to dark mode'
             }
-            className="
-              flex h-9 w-9 items-center
-              justify-center rounded-lg
-
-              border border-neutral-200
-              bg-white text-neutral-900
-
-              transition-colors
-              hover:bg-neutral-100
-
-              focus-visible:outline-2
-              focus-visible:outline-offset-2
-              focus-visible:outline-indigo-500
-
-              dark:border-neutral-800
-              dark:bg-neutral-900
-              dark:text-neutral-100
-              dark:hover:bg-neutral-800
-            "
+            className={controlClass}
           >
             <span aria-hidden="true">
               {isDark ? '☀' : '☾'}
             </span>
           </button>
 
-          {/* Mobile hamburger menu */}
           <button
             type="button"
-            onClick={toggleMenu}
+            onClick={() => setIsMenuOpen((prev) => !prev)}
             aria-label={
               isMenuOpen
                 ? 'Close navigation menu'
                 : 'Open navigation menu'
             }
             aria-expanded={isMenuOpen}
-            aria-controls="primary-navigation"
-            className="
-              flex h-9 w-9 items-center
-              justify-center rounded-lg
-
-              border border-neutral-200
-              bg-white text-neutral-900
-
-              transition-colors
-              hover:bg-neutral-100
-
-              focus-visible:outline-2
-              focus-visible:outline-offset-2
-              focus-visible:outline-indigo-500
-
-              dark:border-neutral-800
-              dark:bg-neutral-900
-              dark:text-neutral-100
-              dark:hover:bg-neutral-800
-
-              md:hidden
-            "
+            aria-controls="mobile-navigation"
+            className={`${controlClass} md:hidden`}
           >
             <span aria-hidden="true">
               {isMenuOpen ? '✕' : '☰'}
             </span>
           </button>
         </div>
+
+        {/* Mobile navigation */}
+        {isMenuOpen && (
+          <div
+            className="
+              absolute inset-x-0 top-full z-20
+              border-b border-white/50
+              dark:border-white/10
+              md:hidden
+            "
+          >
+            {/* Mobile glass layer */}
+            <div
+              aria-hidden="true"
+              className="
+                pointer-events-none absolute inset-0
+                bg-white/[0.45] backdrop-blur-lg
+                dark:bg-[#0c1428]/[0.45]
+              "
+            />
+
+            <nav
+              id="mobile-navigation"
+              aria-label="Mobile navigation"
+              className="relative z-10 flex flex-col gap-1 p-5"
+            >
+              {navLinks.map((link) => (
+                <a
+                  key={link.id}
+                  href={`#${link.id}`}
+                  onClick={closeMenu}
+                  aria-current={
+                    activeSection === link.id
+                      ? 'location'
+                      : undefined
+                  }
+                  className={linkClass(link.id)}
+                >
+                  {link.label}
+                </a>
+              ))}
+            </nav>
+          </div>
+        )}
       </header>
     </div>
   )

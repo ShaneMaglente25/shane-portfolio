@@ -11,33 +11,28 @@ import Experience from './components/Experience'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import Reveal from './components/Reveal'
+import Atmosphere from './components/Atmosphere'
 
-// Key used to store the selected theme.
 const THEME_STORAGE_KEY = 'shane-portfolio-theme'
 
-// Determine the initial theme.
 function getInitialTheme(): boolean {
-  // 1. Check if the visitor previously selected a theme.
   try {
     const savedTheme = localStorage.getItem(THEME_STORAGE_KEY)
 
     if (savedTheme === 'dark') return true
     if (savedTheme === 'light') return false
   } catch {
-    // Continue using the system preference if storage is unavailable.
+    // Fall back to system preference.
   }
 
-  // 2. Otherwise, follow the operating system's preference.
   return window.matchMedia(
     '(prefers-color-scheme: dark)'
   ).matches
 }
 
 function App() {
-  // Lazy initialization: determine the initial theme once.
   const [isDark, setIsDark] = useState<boolean>(getInitialTheme)
 
-  // Save the selected theme whenever it changes.
   useEffect(() => {
     try {
       localStorage.setItem(
@@ -45,58 +40,62 @@ function App() {
         isDark ? 'dark' : 'light'
       )
     } catch {
-      // The theme still works if storage is unavailable.
+      // Theme still works when storage is unavailable.
     }
 
-    // Help the browser style native controls appropriately.
     document.documentElement.style.colorScheme =
       isDark ? 'dark' : 'light'
   }, [isDark])
 
-  // Toggle between light and dark mode.
   function toggleTheme() {
-    setIsDark((previousTheme) => !previousTheme)
+    setIsDark((previous) => !previous)
   }
 
   return (
     <div
       className={`
-        min-h-screen
-        bg-neutral-50 text-neutral-900
-        dark:bg-neutral-950 dark:text-neutral-100
+        relative isolate min-h-screen overflow-x-clip
+        bg-[#f8fafc] text-neutral-900
+        dark:bg-[#080d1c] dark:text-neutral-100
         ${isDark ? 'dark' : ''}
       `}
     >
-      <Navbar
-        isDark={isDark}
-        onToggleTheme={toggleTheme}
-      />
+      {/* Fixed decorative background */}
+      <Atmosphere />
 
-      <main>
-        <Hero />
+      {/* Content stays above the background */}
+      <div className="relative z-10">
+        <Navbar
+          isDark={isDark}
+          onToggleTheme={toggleTheme}
+        />
 
-        <Reveal>
-          <About />
-        </Reveal>
+        <main>
+          <Hero />
 
-        <Reveal>
-          <Skills />
-        </Reveal>
+          <Reveal>
+            <About />
+          </Reveal>
 
-        <Reveal>
-          <Projects />
-        </Reveal>
+          <Reveal>
+            <Skills />
+          </Reveal>
 
-        <Reveal>
-          <Experience />
-        </Reveal>
+          <Reveal>
+            <Projects />
+          </Reveal>
 
-        <Reveal>
-          <Contact />
-        </Reveal>
-      </main>
+          <Reveal>
+            <Experience />
+          </Reveal>
 
-      <Footer />
+          <Reveal>
+            <Contact />
+          </Reveal>
+        </main>
+
+        <Footer />
+      </div>
     </div>
   )
 }

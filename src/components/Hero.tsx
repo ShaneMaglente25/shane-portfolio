@@ -1,53 +1,66 @@
+
+import OrbitGraphic from './OrbitGraphic'
+
 function Hero() {
   return (
-    <section className="px-6 py-24 md:px-10 md:py-32">
-      <div className="mx-auto w-full max-w-[1100px]">
-        <div className="mb-8 flex items-center gap-3">
-          <span className="h-2 w-2 rounded-full bg-emerald-400" />
+    <section className="relative px-6 pb-24 pt-36 md:px-10 md:pb-28 md:pt-40">
+      <div className="mx-auto w-full max-w-[1150px]">
 
-          <p className="text-xs font-medium tracking-[0.14em] text-neutral-500 dark:text-neutral-400">
-            COMPUTER SCIENCE STUDENT & DEVELOPER
-          </p>
-        </div>
+        <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1.5fr)_minmax(280px,0.8fr)] lg:gap-8">
 
-        <h1 className="max-w-[950px] text-5xl font-semibold leading-[1.05] tracking-[-0.055em] text-neutral-900 dark:text-neutral-100 sm:text-6xl md:text-7xl lg:text-8xl">
-          Building useful things with{' '}
-          <span className="text-indigo-600 dark:text-indigo-400">
-            code & curiosity.
-          </span>
-        </h1>
+          {/* Left: Introduction */}
+          <div>
+            <div className="mb-8 flex items-center gap-3">
+              <span className="h-2 w-2 rounded-full bg-emerald-400 motion-safe:animate-pulse" />
 
-        <div className="mt-8 grid grid-cols-1 gap-8 md:grid-cols-[1fr_auto] md:items-end">
-          <p className="max-w-[590px] text-base leading-8 text-neutral-600 dark:text-neutral-400 md:text-lg">
-            I'm Shane Danrell Maglente — a developer exploring software
-            engineering, full-stack development, and AI/ML through practical
-            projects.
-          </p>
+              <p className="text-xs font-medium tracking-[0.14em] text-neutral-500 dark:text-slate-400">
+                COMPUTER SCIENCE STUDENT & DEVELOPER
+              </p>
+            </div>
 
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <a
-              href="#projects"
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-neutral-900 px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-neutral-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-500 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-300"
-            >
-              Explore my work
-              <span aria-hidden="true">↗</span>
-            </a>
+            <h1 className="max-w-[760px] text-5xl font-semibold leading-[1.05] tracking-[-0.055em] text-neutral-900 dark:text-neutral-100 sm:text-6xl lg:text-[4.5rem]">
+              Building useful things with{' '}
+              <span className="text-indigo-600 dark:text-indigo-400">
+                code & curiosity.
+              </span>
+            </h1>
 
-            <a
-              href="#about"
-              className="inline-flex items-center justify-center rounded-lg border border-neutral-200 px-5 py-3 text-sm font-medium text-neutral-800 transition-colors hover:bg-neutral-100 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-500 dark:border-neutral-800 dark:text-neutral-200 dark:hover:bg-neutral-900"
-            >
-              More about me
-            </a>
+            <p className="mt-8 max-w-[590px] text-base leading-8 text-neutral-600 dark:text-slate-400 md:text-lg">
+              I'm Shane Danrell Maglente — a developer exploring software
+              engineering, full-stack development, and AI/ML through
+              practical projects.
+            </p>
+
+            {/* Call-to-action buttons */}
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              <a
+                href="#projects"
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-neutral-900 px-5 py-3 text-sm font-medium text-white transition-all hover:-translate-y-0.5 hover:bg-neutral-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-500 motion-reduce:transform-none dark:bg-indigo-500 dark:text-white dark:hover:bg-indigo-400"
+              >
+                Explore my work
+                <span aria-hidden="true">↗</span>
+              </a>
+
+              <a
+                href="#about"
+                className="inline-flex items-center justify-center rounded-lg border border-neutral-300 bg-white/50 px-5 py-3 text-sm font-medium text-neutral-800 backdrop-blur-sm transition-all hover:-translate-y-0.5 hover:bg-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-indigo-500 motion-reduce:transform-none dark:border-indigo-400/20 dark:bg-white/5 dark:text-neutral-200 dark:hover:bg-white/10"
+              >
+                More about me
+              </a>
+            </div>
           </div>
+
+          {/* Right: Animated developer orbit */}
+          <OrbitGraphic />
         </div>
 
-        <div className="mt-20 flex flex-col gap-3 border-t border-neutral-200 pt-5 dark:border-neutral-800 sm:flex-row sm:items-center sm:justify-between">
-          <p className="text-xs font-medium tracking-[0.12em] text-neutral-500 dark:text-neutral-400">
+        {/* Currently exploring */}
+        <div className="mt-16 flex flex-col gap-3 border-t border-neutral-200/80 pt-6 dark:border-indigo-300/15 sm:flex-row sm:items-center sm:justify-between lg:mt-24">
+          <p className="text-xs font-medium tracking-[0.12em] text-neutral-500 dark:text-slate-400">
             CURRENTLY EXPLORING
           </p>
 
-          <p className="text-sm text-neutral-700 dark:text-neutral-300">
+          <p className="text-sm text-neutral-700 dark:text-slate-300">
             Full-Stack Development
             <span className="mx-2 text-indigo-500">·</span>
             AI/ML

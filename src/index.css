@@ -3,41 +3,177 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @font-face {
-  font-family: 'Geist';
-  src: url('/fonts/Geist-Regular.woff2') format('woff2');
+  font-family: "Geist";
+  src: url("/fonts/Geist-Regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Geist';
-  src: url('/fonts/Geist-Medium.woff2') format('woff2');
+  font-family: "Geist";
+  src: url("/fonts/Geist-Medium.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Geist';
-  src: url('/fonts/Geist-SemiBold.woff2') format('woff2');
+  font-family: "Geist";
+  src: url("/fonts/Geist-SemiBold.woff2") format("woff2");
   font-weight: 600;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Geist';
-  src: url('/fonts/Geist-Bold.woff2') format('woff2');
+  font-family: "Geist";
+  src: url("/fonts/Geist-Bold.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
 }
 
 :root {
-  font-family: 'Geist', Arial, sans-serif;
+  font-family: "Geist", Arial, sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
 
 * {
   box-sizing: border-box;
+}
+
+/* ========================================
+   PORTFOLIO ATMOSPHERE ANIMATIONS
+   ======================================== */
+
+/* Slowly moving wave pattern */
+@keyframes waveDrift {
+  0% {
+    transform: translate3d(-1%, 0, 0) scale(1.05);
+  }
+
+  100% {
+    transform: translate3d(1%, 1%, 0) scale(1.05);
+  }
+}
+
+.wave-drift {
+  animation: waveDrift 24s ease-in-out infinite alternate;
+}
+
+/* Subtle star twinkling */
+@keyframes starTwinkle {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+
+  50% {
+    opacity: 0.9;
+  }
+}
+
+.star-twinkle {
+  opacity: 0.45;
+  animation: starTwinkle 4s ease-in-out infinite;
+}
+
+/* Clockwise orbit */
+@keyframes orbitClockwise {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Counter-clockwise orbit */
+@keyframes orbitCounterClockwise {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+/* Python symbol */
+.orbit-spin {
+  animation: orbitClockwise 22s linear infinite;
+}
+
+.orbit-counter {
+  animation: orbitCounterClockwise 22s linear infinite;
+}
+
+/* Code symbol */
+.orbit-spin-slow {
+  animation: orbitCounterClockwise 30s linear infinite;
+}
+
+.orbit-counter-slow {
+  animation: orbitClockwise 30s linear infinite;
+}
+
+/* Database symbol */
+.orbit-spin-alt {
+  animation: orbitCounterClockwise 26s linear infinite;
+  animation-delay: -13s;
+}
+
+.orbit-counter-alt {
+  animation: orbitClockwise 26s linear infinite;
+  animation-delay: -13s;
+}
+
+/* Gentle floating motion */
+@keyframes floatSlow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+.float-slow {
+  animation: floatSlow 5s ease-in-out infinite;
+}
+
+/* Terminal cursor */
+@keyframes cursorBlink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.cursor-blink {
+  animation: cursorBlink 1s step-end infinite;
+}
+
+/* Respect accessibility preferences */
+@media (prefers-reduced-motion: reduce) {
+  .wave-drift,
+  .star-twinkle,
+  .orbit-spin,
+  .orbit-counter,
+  .orbit-spin-slow,
+  .orbit-counter-slow,
+  .orbit-spin-alt,
+  .orbit-counter-alt,
+  .float-slow,
+  .cursor-blink {
+    animation: none !important;
+  }
 }
 
 html {
