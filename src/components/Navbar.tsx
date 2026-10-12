@@ -165,11 +165,14 @@ function Navbar({ isDark, onToggleTheme }: NavbarProps) {
     >
       <header
         className={`
-          relative flex h-[73px] items-center
-          justify-between px-6 md:px-10
+          relative mx-4 mt-3 flex h-[73px]
+          items-center justify-between
+          rounded-2xl px-6 md:mx-8 md:px-10
+
           transition-transform duration-300 ease-in-out
           focus-within:translate-y-0
           motion-reduce:transition-none
+
           ${
             isVisible
               ? 'translate-y-0'
@@ -182,12 +185,18 @@ function Navbar({ isDark, onToggleTheme }: NavbarProps) {
           aria-hidden="true"
           className="
             pointer-events-none absolute inset-0 z-0
-            border-b border-white/50
+            rounded-2xl
+
+            border border-white/50
             bg-white/[0.45]
             backdrop-blur-lg
             backdrop-saturate-125
+
+            shadow-lg shadow-slate-900/5
+
             dark:border-white/10
             dark:bg-[#0c1428]/[0.45]
+            dark:shadow-black/20
           "
         />
 
