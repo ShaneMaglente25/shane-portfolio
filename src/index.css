@@ -1,12 +1,21 @@
+/* ==========================================
+   1. TAILWIND CSS CONFIGURATION
+   ========================================== */
+
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
+
+/* ==========================================
+   2. GEIST FONT DEFINITIONS
+   ========================================== */
 
 @font-face {
   font-family: "Geist";
   src: url("/fonts/Geist-Regular.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -14,6 +23,7 @@
   src: url("/fonts/Geist-Medium.woff2") format("woff2");
   font-weight: 500;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -21,6 +31,7 @@
   src: url("/fonts/Geist-SemiBold.woff2") format("woff2");
   font-weight: 600;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -28,23 +39,206 @@
   src: url("/fonts/Geist-Bold.woff2") format("woff2");
   font-weight: 700;
   font-style: normal;
+  font-display: swap;
 }
+
+/* ==========================================
+   3. GLOBAL DESIGN VARIABLES
+   ========================================== */
 
 :root {
   font-family: "Geist", Arial, sans-serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
+
+  /* Accent colors */
+  --accent: #4f46e5;
+  --accent-soft: rgba(99, 102, 241, 0.12);
+
+  /* Typography */
+  --page-text: #171717;
+  --muted-text: #64748b;
+
+  /* Glassmorphism */
+  --glass-border: rgba(255, 255, 255, 0.55);
+  --glass-shadow: 0 12px 40px rgba(15, 23, 42, 0.04);
 }
 
-* {
+/* Dark theme design variables */
+
+.dark {
+  --accent: #a5b4fc;
+  --accent-soft: rgba(129, 140, 248, 0.12);
+
+  --page-text: #f5f5f5;
+  --muted-text: #94a3b8;
+
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* ==========================================
+   4. GLOBAL BASE STYLES
+   ========================================== */
+
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
-/* ========================================
-   PORTFOLIO ATMOSPHERE ANIMATIONS
-   ======================================== */
+html {
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
 
-/* Slowly moving wave pattern */
+body {
+  margin: 0;
+  min-width: 320px;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Match scrollbar to dark theme */
+
+html:has(.dark) {
+  scrollbar-color: #475569 transparent;
+}
+
+/* ==========================================
+   5. TEXT SELECTION
+   ========================================== */
+
+::selection {
+  background: rgba(99, 102, 241, 0.22);
+  color: #312e81;
+}
+
+.dark ::selection {
+  background: rgba(165, 180, 252, 0.3);
+  color: #ffffff;
+}
+
+/* ==========================================
+   6. KEYBOARD ACCESSIBILITY
+   ========================================== */
+
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+/* ==========================================
+   7. CUSTOM SCROLLBAR
+   ========================================== */
+
+/* Chromium and Safari */
+
+::-webkit-scrollbar {
+  width: 9px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Dark mode scrollbar */
+
+html:has(.dark)::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+
+html:has(.dark)::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* ==========================================
+   8. REUSABLE GLASSMORPHISM
+   ========================================== */
+
+/*
+  Apply .portfolio-glass to future cards or panels.
+  Existing components can keep their own Tailwind
+  glass styling.
+*/
+
+.portfolio-glass {
+  background: rgba(255, 255, 255, 0.55);
+
+  border: 1px solid var(--glass-border);
+  border-radius: 16px;
+
+  box-shadow: var(--glass-shadow);
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Cosmic dark glass */
+
+.dark .portfolio-glass {
+  background: rgba(17, 26, 48, 0.55);
+}
+
+/* ==========================================
+   9. REUSABLE GRADIENT DIVIDER
+   ========================================== */
+
+.portfolio-divider {
+  height: 1px;
+  border: 0;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(99, 102, 241, 0.2),
+    transparent
+  );
+}
+
+.dark .portfolio-divider {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(165, 180, 252, 0.2),
+    transparent
+  );
+}
+
+/* ==========================================
+   10. REUSABLE HOVER INTERACTIONS
+   ========================================== */
+
+.portfolio-hover {
+  transition:
+    transform 300ms ease,
+    border-color 300ms ease,
+    box-shadow 300ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .portfolio-hover:hover {
+    transform: translateY(-3px);
+
+    box-shadow: 0 12px 32px rgba(99, 102, 241, 0.08);
+  }
+}
+
+/* ==========================================
+   11. ANIMATED LIGHT-MODE WAVES
+   ========================================== */
+
 @keyframes waveDrift {
   0% {
     transform: translate3d(-1%, 0, 0) scale(1.05);
@@ -59,7 +253,10 @@
   animation: waveDrift 24s ease-in-out infinite alternate;
 }
 
-/* Subtle star twinkling */
+/* ==========================================
+   12. COSMIC STAR TWINKLING
+   ========================================== */
+
 @keyframes starTwinkle {
   0%,
   100% {
@@ -73,10 +270,16 @@
 
 .star-twinkle {
   opacity: 0.45;
+
   animation: starTwinkle 4s ease-in-out infinite;
 }
 
-/* Clockwise orbit */
+/* ==========================================
+   13. DEVELOPER ORBIT ANIMATIONS
+   ========================================== */
+
+/* Clockwise rotation */
+
 @keyframes orbitClockwise {
   from {
     transform: rotate(0deg);
@@ -87,7 +290,8 @@
   }
 }
 
-/* Counter-clockwise orbit */
+/* Counter-clockwise rotation */
+
 @keyframes orbitCounterClockwise {
   from {
     transform: rotate(0deg);
@@ -99,6 +303,7 @@
 }
 
 /* Python symbol */
+
 .orbit-spin {
   animation: orbitClockwise 22s linear infinite;
 }
@@ -108,6 +313,7 @@
 }
 
 /* Code symbol */
+
 .orbit-spin-slow {
   animation: orbitCounterClockwise 30s linear infinite;
 }
@@ -117,17 +323,23 @@
 }
 
 /* Database symbol */
+
 .orbit-spin-alt {
   animation: orbitCounterClockwise 26s linear infinite;
+
   animation-delay: -13s;
 }
 
 .orbit-counter-alt {
   animation: orbitClockwise 26s linear infinite;
+
   animation-delay: -13s;
 }
 
-/* Gentle floating motion */
+/* ==========================================
+   14. FLOATING TERMINAL ANIMATION
+   ========================================== */
+
 @keyframes floatSlow {
   0%,
   100% {
@@ -143,7 +355,10 @@
   animation: floatSlow 5s ease-in-out infinite;
 }
 
-/* Terminal cursor */
+/* ==========================================
+   15. BLINKING TERMINAL CURSOR
+   ========================================== */
+
 @keyframes cursorBlink {
   0%,
   49% {
@@ -160,8 +375,20 @@
   animation: cursorBlink 1s step-end infinite;
 }
 
-/* Respect accessibility preferences */
+/* ==========================================
+   16. REDUCED MOTION ACCESSIBILITY
+   ========================================== */
+
+/*
+  Visitors who prefer reduced motion should
+  see a usable, static version of the website.
+*/
+
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   .wave-drift,
   .star-twinkle,
   .orbit-spin,
@@ -174,13 +401,13 @@
   .cursor-blink {
     animation: none !important;
   }
-}
 
-html {
-  scroll-behavior: smooth;
-}
+  .portfolio-hover {
+    transition: none;
+  }
 
-body {
-  margin: 0;
-  min-width: 320px;
+  .portfolio-hover:hover {
+    transform: none;
+    box-shadow: none;
+  }
 }
