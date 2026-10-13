@@ -1,12 +1,13 @@
 
 import { projects } from '../data/projects'
 import ProjectPreview from './ProjectPreview'
+import TiltCard from './TiltCard'
 
 function Projects() {
   return (
     <section
       id="projects"
-      className="border-t border-neutral-200 px-6 py-24 dark:border-neutral-800 md:px-10 md:py-32"
+      className="relative scroll-mt-24 border-t border-neutral-200/60 px-6 py-24 dark:border-indigo-300/10 md:px-10 md:py-32"
     >
       <div className="mx-auto max-w-[1100px]">
 
@@ -18,34 +19,44 @@ function Projects() {
             </p>
 
             <h2 className="text-4xl font-semibold tracking-[-0.045em] text-neutral-900 dark:text-neutral-100 md:text-5xl">
-              Projects I've built.
+              Projects I've built
+              <span className="text-indigo-600 dark:text-indigo-400">
+                .
+              </span>
             </h2>
           </div>
 
-          <p className="max-w-[360px] text-sm leading-7 text-neutral-600 dark:text-neutral-400">
-            A selection of applications I've developed to explore
-            software engineering and solve practical problems.
+          <p className="max-w-[360px] text-sm leading-7 text-neutral-600 dark:text-slate-400">
+            A selection of applications I've developed to
+            explore software engineering and solve practical
+            problems.
           </p>
         </div>
 
         {/* Project case studies */}
-        <div className="space-y-12 md:space-y-20">
+        <div className="space-y-16 lg:space-y-24">
           {projects.map((project, index) => (
             <article
               key={project.id}
-              className="grid items-start gap-8 lg:grid-cols-2 lg:gap-12"
+              className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12"
             >
-              {/* Visual preview */}
+              {/* Interactive project visual */}
               <div
-                className={`${
-                  index % 2 === 1 ? 'lg:order-2' : ''
-                }`}
+                className={
+                  index % 2 === 1
+                    ? 'lg:order-2'
+                    : ''
+                }
               >
-                <ProjectPreview project={project} />
+                <TiltCard>
+                  <ProjectPreview project={project} />
+                </TiltCard>
               </div>
 
-              {/* Case-study information */}
-              <div className="flex h-full flex-col justify-center">
+              {/* Project information */}
+              <div className="flex flex-col justify-center">
+
+                {/* Project number and type */}
                 <div className="mb-5 flex items-center gap-3">
                   <span className="font-mono text-xs text-indigo-600 dark:text-indigo-400">
                     {String(index + 1).padStart(2, '0')}
@@ -53,26 +64,29 @@ function Projects() {
 
                   <span className="h-px w-6 bg-neutral-300 dark:bg-neutral-700" />
 
-                  <span className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+                  <span className="text-xs font-medium uppercase tracking-wider text-neutral-500 dark:text-slate-400">
                     {project.type}
                   </span>
                 </div>
 
+                {/* Title */}
                 <h3 className="text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100 sm:text-3xl">
                   {project.title}
                 </h3>
 
-                <p className="mt-4 text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                {/* Description */}
+                <p className="mt-4 text-sm leading-7 text-neutral-600 dark:text-slate-400">
                   {project.description}
                 </p>
 
-                <div className="mt-7 space-y-5 border-t border-neutral-200 pt-6 dark:border-neutral-800">
+                {/* Case study details */}
+                <div className="mt-7 space-y-5 border-t border-neutral-200/70 pt-6 dark:border-white/10">
                   <div>
                     <h4 className="mb-2 text-xs font-semibold uppercase tracking-wide text-neutral-900 dark:text-neutral-200">
                       The challenge
                     </h4>
 
-                    <p className="text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                    <p className="text-sm leading-7 text-neutral-600 dark:text-slate-400">
                       {project.problem}
                     </p>
                   </div>
@@ -82,7 +96,7 @@ function Projects() {
                       What I built
                     </h4>
 
-                    <p className="text-sm leading-7 text-neutral-600 dark:text-neutral-400">
+                    <p className="text-sm leading-7 text-neutral-600 dark:text-slate-400">
                       {project.solution}
                     </p>
                   </div>
@@ -93,22 +107,36 @@ function Projects() {
                   {project.technologies.map((technology) => (
                     <span
                       key={technology}
-                      className="rounded-md border border-neutral-200 px-3 py-1.5 text-xs text-neutral-600 dark:border-neutral-800 dark:text-neutral-400"
+                      className="
+                        rounded-lg border border-neutral-200/70
+                        bg-white/40 px-3 py-1.5 text-xs
+                        text-neutral-600 backdrop-blur-sm
+
+                        transition-colors duration-200
+                        hover:border-indigo-300
+                        hover:text-indigo-600
+
+                        dark:border-white/10
+                        dark:bg-white/[0.04]
+                        dark:text-slate-300
+                        dark:hover:border-indigo-400/40
+                        dark:hover:text-indigo-300
+                      "
                     >
                       {technology}
                     </span>
                   ))}
                 </div>
 
-                {/* Role */}
-                <p className="mt-6 text-xs text-neutral-500 dark:text-neutral-400">
+                {/* Project role */}
+                <p className="mt-6 text-xs text-neutral-500 dark:text-slate-400">
                   Role:{' '}
                   <span className="font-medium text-neutral-800 dark:text-neutral-200">
                     {project.role}
                   </span>
                 </p>
 
-                {/* Only display links if they exist */}
+                {/* Optional project links */}
                 {(project.githubUrl || project.demoUrl) && (
                   <div className="mt-6 flex flex-wrap gap-5">
                     {project.githubUrl && (

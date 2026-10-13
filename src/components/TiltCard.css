@@ -1,0 +1,51 @@
+/* ==================================
+   INTERACTIVE PROJECT TILT
+   ================================== */
+
+.tilt-card {
+  position: relative;
+  perspective: 1100px;
+}
+
+/* The project preview itself */
+.tilt-card__surface {
+  transform: rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+
+  transform-style: preserve-3d;
+
+  transition: transform 220ms ease-out;
+}
+
+/* Cursor-following spotlight */
+.tilt-card__glow {
+  background: radial-gradient(
+    420px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(129, 140, 248, 0.2),
+    transparent 65%
+  );
+
+  opacity: 0;
+
+  transition: opacity 300ms ease-out;
+}
+
+/* Show spotlight on mouse-capable devices */
+@media (hover: hover) and (pointer: fine) {
+  @media (prefers-reduced-motion: no-preference) {
+    .tilt-card:hover .tilt-card__glow {
+      opacity: 1;
+    }
+  }
+}
+
+/* Disable movement for visitors who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .tilt-card__surface {
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .tilt-card__glow {
+    display: none;
+  }
+}
